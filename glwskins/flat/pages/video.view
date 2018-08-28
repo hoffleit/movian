@@ -163,7 +163,9 @@ widget(container_z, {
                                   3, "skin://osd/osd_settings_audio.view",
                                   4, "skin://osd/osd_settings_video.view",
                                   100, "skin://osd/osd_subs.view",
-                                  101, "skin://osd/osd_audio.view"
+                                  101, "skin://osd/osd_audio.view",
+                                  102, "skin://osd/osd_chapter.view",
+                                  103, "skin://osd/osd_seek.view"
                                  );
               });
             });
@@ -241,6 +243,20 @@ widget(container_z, {
                             focus("osd_main");
                           }, true, "menu-btn",
                           $clone.osdpage > 0 && $clone.osdpage < 100);
+
+          PLAYDECK_BUTTON("skin://icons/ic_chapter_48px.svg",
+                          _("Chapter"),
+                          {
+                            $clone.osdpage = select($clone.osdpage == 102, 0, 102);
+                            focus("osd_chapter");
+                          }, $self.media.chapterindex.available, "chapter-btn");
+
+          PLAYDECK_BUTTON("skin://icons/ic_chapter_48px.svg",
+                          _("Seek"),
+                          {
+                            $clone.osdpage = select($clone.osdpage == 103, 0, 103);
+                            focus("osd_seek");
+                          }, $self.media.seekindex.available, "seek-btn");
 
         });
       });
@@ -348,6 +364,17 @@ widget(container_z, {
       caption: $self.media.metadata.title;
       shadow: true;
       size: 2em;
+    });
+    cloner($core.media.current.chapterindex.positions, container_z, {
+      widget(label, {
+        hidden: select($parent.media.currenttime > $self.timestamp &&
+                     $parent.media.currenttime < $self.end, false, true);
+        alpha: iir($view.showSeekBar, 8);
+        caption: $self.title;
+        shadow: true;
+        size: 1.5em;
+        spacing:0;
+      });
     });
     widget(container_x, {
       spacing: 0.5em;

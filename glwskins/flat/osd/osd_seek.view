@@ -1,0 +1,61 @@
+#import "skin://theme.view"
+
+
+widget(container_y, {
+  id: "osd_seek";
+
+  widget(label, {
+    style: "osdsettingtitle";
+    height: 3em;
+    align: center;
+    caption: _("Seek");
+    size: 1.5em;
+  });
+
+  onEvent(back, {
+    $clone.osdpage = 0;
+    focus("seek-btn");
+  }, $clone.osdpage);
+
+  widget(container_x, {
+    widget(list_y, {
+      id: "list";
+
+      cloner($core.media.current.seekindex.positions, container_z, {
+        height: 3em;
+        focusable: true;
+        ListItemHighlight();
+        ListItemBevel();
+        onEvent(activate, {
+          $core.media.current.currenttime = $self.timestamp;
+        });
+
+        widget(container_x, {
+          padding: [0.5em, 0];
+
+          widget(image, {
+	    source: $self.image;
+	  });
+
+   	  widget(label, {
+            filterConstraintX: true;
+            caption: value2duration($self.timestamp, true);
+	    alpha: select($parent.media.currenttime > $self.timestamp &&
+                     $parent.media.currenttime < $self.timestamp + 60, 1, 0.5);
+            style: "NavSelectedTextSecondary";
+          });
+        });
+      });
+    });
+    widget(slider_y, {
+      bind("list");
+      width: 4;
+      focusable: canScroll();
+      alpha: iir(canScroll(), 16);
+      widget(quad, {
+	alpha: 1;
+      });
+    });
+  });
+});
+
