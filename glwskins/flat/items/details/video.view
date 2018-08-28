@@ -99,7 +99,13 @@ widget(container_y, {
             autohide: true;
             caption: $self.metadata.genre;
             shadow: true;
-            maxlines: 3;
+            maxlines: 2;
+          });
+          widget(label, {
+            autohide: true;
+            caption: "mit " + $self.metadata.actors;
+            shadow: true;
+            maxlines: 2;
           });
 
           widget(container_x, {
